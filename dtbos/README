@@ -1,0 +1,1 @@
+This overlay is required to be signed and included in the FIT Image. Without this overlay, the Linux kernel would not be able to detect a TPM peripheral
