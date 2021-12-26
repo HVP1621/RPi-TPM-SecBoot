@@ -1,0 +1,51 @@
+From 633e19183df876076e3e77e0ece37ed9d451e111 Mon Sep 17 00:00:00 2001
+From: Harshvardhan Patel <harshvardhan1621@gmail.com>
+Date: Sun, 26 Dec 2021 17:43:36 +0530
+Subject: [PATCH 4/5] TPM Patch to read the Pub Key bytes from the TPM NVRAM
+
+* Changed the Hardcoded owner policy
+
+* Don't use the default decoder function
+
+* Read the RAW bytes read from the TPM Command Response
+---
+ lib/tpm-v2.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/lib/tpm-v2.c b/lib/tpm-v2.c
+index 235f8c20d4..3218e23e05 100644
+--- a/lib/tpm-v2.c
++++ b/lib/tpm-v2.c
+@@ -178,7 +178,7 @@ u32 tpm2_nv_read_value(struct udevice *dev, u32 index, void *data, u32 count)
+ 		tpm_u32(TPM2_CC_NV_READ),	/* Command code */
+ 
+ 		/* handles 8 bytes */
+-		tpm_u32(TPM2_RH_PLATFORM),	/* Primary platform seed */
++		tpm_u32(TPM2_RH_OWNER),		/* Primary platform seed */
+ 		tpm_u32(HR_NV_INDEX + index),	/* Password authorisation */
+ 
+ 		/* AUTH_SESSION */
+@@ -202,10 +202,18 @@ u32 tpm2_nv_read_value(struct udevice *dev, u32 index, void *data, u32 count)
+ 	ret = tpm_sendrecv_command(dev, command_v2, response, &response_len);
+ 	if (ret)
+ 		return log_msg_ret("read", ret);
+-	if (unpack_byte_string(response, response_len, "wdds",
++
++	/* if (unpack_byte_string(response, response_len, "wdds",
+ 			       0, &tag, 2, &size, 6, &code,
+ 			       16, data, count))
+-		return TPM_LIB_ERROR;
++		return TPM_LIB_ERROR;*/
++
++	/* Copy RAW Bytes of the NVRAM Data to response*/
++	/* To-Do:
++	    - Remove the Hard Coded Offset '16'
++		- Remove the Hard Coded Data Length '270'
++		- 270 is the length of the public key in DER Format*/
++	memcpy(data, response+16, 270);
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
+

@@ -1,0 +1,50 @@
+From 453ad085b0a71fe1b73a74e403aebfb35e9748fb Mon Sep 17 00:00:00 2001
+From: Harshvardhan Patel <harshvardhan1621@gmail.com>
+Date: Sun, 26 Dec 2021 17:27:46 +0530
+Subject: [PATCH 1/5] FIT Verification Return Error When Signature Node Not
+ Found
+
+---
+ common/image-fit-sig.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/common/image-fit-sig.c b/common/image-fit-sig.c
+index 63e5423c92..a1187ad353 100644
+--- a/common/image-fit-sig.c
++++ b/common/image-fit-sig.c
+@@ -84,6 +84,10 @@ static int fit_image_setup_verify(struct image_sign_info *info,
+ 		padding_name = RSA_DEFAULT_PADDING_NAME;
+ 
+ 	memset(info, '\0', sizeof(*info));
++
++	/* Remove dependency from Control FDT
++	To-Do: Migrate this to TPM
++	*/
+ 	info->keyname = fdt_getprop(fit, noffset, FIT_KEY_HINT, NULL);
+ 	info->fit = fit;
+ 	info->node_offset = noffset;
+@@ -194,9 +198,11 @@ int fit_image_verify_required_sigs(const void *fit, int image_noffset,
+ 	*no_sigsp = 1;
+ 	sig_node = fdt_subnode_offset(sig_blob, 0, FIT_SIG_NODENAME);
+ 	if (sig_node < 0) {
+-		debug("%s: No signature node found: %s\n", __func__,
++		printf("%s: No signature node found: %s\n", __func__,
+ 		      fdt_strerror(sig_node));
+-		return 0;
++		/*Return an error if no signature found
++		Earlier this did not error out*/
++		return -ENOENT;
+ 	}
+ 
+ 	fdt_for_each_subnode(noffset, sig_blob, sig_node) {
+@@ -432,6 +438,7 @@ static int fit_config_verify_required_sigs(const void *fit, int conf_noffset,
+ 	/* Work out what we need to verify */
+ 	sig_node = fdt_subnode_offset(sig_blob, 0, FIT_SIG_NODENAME);
+ 	if (sig_node < 0) {
++		printf("No Signature Node Found\n");
+ 		debug("%s: No signature node found: %s\n", __func__,
+ 		      fdt_strerror(sig_node));
+ 		return 0;
+-- 
+2.25.1
+

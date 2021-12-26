@@ -1,0 +1,93 @@
+From e4e556391eb73844bcc97431d26ec78a2e4c61c9 Mon Sep 17 00:00:00 2001
+From: Harshvardhan Patel <harshvardhan1621@gmail.com>
+Date: Sun, 26 Dec 2021 17:34:44 +0530
+Subject: [PATCH 2/5] Add Debug Print Statements to Trace Errors
+
+---
+ lib/asn1_decoder.c    | 14 ++++++++++++++
+ lib/rsa/rsa-keyprop.c |  1 +
+ 2 files changed, 15 insertions(+)
+
+diff --git a/lib/asn1_decoder.c b/lib/asn1_decoder.c
+index bcb0390eb4..78e3114c35 100644
+--- a/lib/asn1_decoder.c
++++ b/lib/asn1_decoder.c
+@@ -176,6 +176,7 @@ int asn1_ber_decoder(const struct asn1_decoder *decoder,
+ 		     const unsigned char *data,
+ 		     size_t datalen)
+ {
++	printf("Attempting asn1 Decoding\n");
+ 	const unsigned char *machine = decoder->machine;
+ 	const asn1_action_t *actions = decoder->actions;
+ 	size_t machlen = decoder->machlen;
+@@ -482,42 +483,55 @@ next_op:
+ 
+ data_overrun_error:
+ 	errmsg = "Data overrun error";
++	printf("Data overrun error\n");
+ 	goto error;
+ machine_overrun_error:
+ 	errmsg = "Machine overrun error";
++	printf("Machine overrun error\n");
+ 	goto error;
+ jump_stack_underflow:
+ 	errmsg = "Jump stack underflow";
++	printf("Jump stack underflow\n");
+ 	goto error;
+ jump_stack_overflow:
+ 	errmsg = "Jump stack overflow";
++	printf("Jump stack overflow\n");
+ 	goto error;
+ cons_stack_underflow:
+ 	errmsg = "Cons stack underflow";
++	printf("Cons stack underflow\n");
+ 	goto error;
+ cons_stack_overflow:
+ 	errmsg = "Cons stack overflow";
++	printf("Cons stack overflow\n");
+ 	goto error;
+ cons_length_error:
+ 	errmsg = "Cons length error";
++	printf("Cons length error\n");
+ 	goto error;
+ missing_eoc:
+ 	errmsg = "Missing EOC in indefinite len cons";
++	printf("Missing EOC in indefinite len cons\n");
+ 	goto error;
+ invalid_eoc:
+ 	errmsg = "Invalid length EOC";
++	printf("Invalid length EOC\n");
+ 	goto error;
+ length_too_long:
+ 	errmsg = "Unsupported length";
++	printf("Unsupported length\n");
+ 	goto error;
+ indefinite_len_primitive:
+ 	errmsg = "Indefinite len primitive not permitted";
++	printf("Indefinite len primitive not permitted\n");
+ 	goto error;
+ tag_mismatch:
+ 	errmsg = "Unexpected tag";
++	printf("Unexpected tag\n");
+ 	goto error;
+ long_tag_not_supported:
+ 	errmsg = "Long tag not supported";
++	printf("Long tag not supported\n");
+ error:
+ 	pr_debug("\nASN1: %s [m=%zu d=%zu ot=%02x t=%02x l=%zu]\n",
+ 		 errmsg, pc, dp, optag, tag, len);
+diff --git a/lib/rsa/rsa-keyprop.c b/lib/rsa/rsa-keyprop.c
+index 98855f67b8..5ca618f089 100644
+--- a/lib/rsa/rsa-keyprop.c
++++ b/lib/rsa/rsa-keyprop.c
+@@ -663,6 +663,7 @@ int rsa_gen_key_prop(const void *key, uint32_t keylen, struct key_prop **prop)
+ 	}
+ 
+ 	ret = rsa_parse_pub_key(&rsa_key, key, keylen);
++	printf("ASN Decoding Value: %d\n", ret);
+ 	if (ret)
+ 		goto out;
+ 
+-- 
+2.25.1
+

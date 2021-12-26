@@ -1,0 +1,26 @@
+From ccdd5347851760b3fedb254d603041f62003c758 Mon Sep 17 00:00:00 2001
+From: Harshvardhan Patel <harshvardhan1621@gmail.com>
+Date: Sun, 26 Dec 2021 17:40:38 +0530
+Subject: [PATCH 3/5] TPM Increase the Command Buffer size to read public key
+ bytes
+
+---
+ lib/tpm-utils.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/tpm-utils.h b/lib/tpm-utils.h
+index d680d14088..9b8c913b66 100644
+--- a/lib/tpm-utils.h
++++ b/lib/tpm-utils.h
+@@ -7,7 +7,7 @@
+ #ifndef __TPM_UTILS_H
+ #define __TPM_UTILS_H
+ 
+-#define COMMAND_BUFFER_SIZE 256
++#define COMMAND_BUFFER_SIZE 512
+ 
+ /* Internal error of TPM command library */
+ #define TPM_LIB_ERROR ((u32)~0u)
+-- 
+2.25.1
+
