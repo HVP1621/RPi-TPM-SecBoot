@@ -1,0 +1,23 @@
+- Advisable to checkout to the following commit for applying the U-Boot patches
+- The patches have been tested on top of the following commit
+- Applying patches on top of any other revision of the repo might end up in the patches not being
+  applied cleanly or a broken patch
+
+commit 360e392274e3bfeda3b7226d2cac7514774d0da1 (HEAD -> master, origin/master, origin/HEAD)
+Merge: 77680d8f85 b55881ddb4
+Author: Tom Rini <trini@konsulko.com>
+Date:   Sun Oct 31 15:48:43 2021 -0400
+
+    Merge tag 'dm-pull-boo21' of https://source.denx.de/u-boot/custodians/u-boot-dm
+    
+    Environment tidy-ups
+    patman 'postfix' support
+    fix binman test race condition causing a timeout error
+    
+    # gpg: Signature made Sun 31 Oct 2021 03:36:55 PM EDT
+    # gpg:                using RSA key B25C0022AF86A7CC1655B6277F173A3E9008ADE6
+    # gpg:                issuer "sjg@chromium.org"
+    # gpg: Good signature from "Simon Glass <sjg@chromium.org>" [unknown]
+    # gpg: WARNING: This key is not certified with a trusted signature!
+    # gpg:          There is no indication that the signature belongs to the owner.
+    # Primary key fingerprint: B25C 0022 AF86 A7CC 1655  B627 7F17 3A3E 9008 ADE6
