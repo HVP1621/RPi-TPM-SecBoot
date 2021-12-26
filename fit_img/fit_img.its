@@ -1,0 +1,68 @@
+/dts-v1/;
+/ {
+    description = "RPi FIT Image";
+    #address-cells = <2>;
+    images {
+        kernel-1 {
+            description = "default kernel";
+            data = /incbin/("kernel8.img");
+            type = "kernel";
+            arch = "arm64";
+            os = "linux";
+            compression = "gzip";
+            load =  <0x00080000>;
+            entry = <0x00080000>;
+            hash-1 {
+                algo = "sha256";
+            };
+        };
+        fdt-1 {
+            description = "Main Device Tree";
+            data = /incbin/("bcm2711-rpi-4-b.dtb");
+            type = "flat_dt";
+            arch = "arm64";
+	    load = <0x02eff3500>;
+	    entry = <0x02eff3500>;
+            compression = "none";
+            hash-1 {
+                algo = "sha256";
+            };
+        };
+        fdt-tpm-9670 {
+	    description = "Infineon TPM SLB 9670 Device Tree Overlay";
+	    data = /incbin/("tpm-slb9670.dtbo");
+	    type = "flat_dt";
+            arch = "arm64";
+            load = <0x030000000>;
+            entry = <0x030000000>;
+            compression = "none";
+            hash-1 {
+                algo = "sha256";
+            };
+
+        };
+    };
+    configurations {
+        default = "config-1";
+        config-1 {
+            description = "default configuration";
+            kernel = "kernel-1";
+            fdt = "fdt-1";
+            signature-1 {
+                algo = "sha256,rsa2048";
+                key-name-hint = "dev";
+                sign-images = "fdt", "kernel";
+            };
+        };
+	config-tpm {
+            description = "TPM 9670 Overlay Config";
+            fdt = "fdt-tpm-9670";
+            signature-1 {
+                algo = "sha256,rsa2048";
+                key-name-hint = "dev";
+                sign-images = "fdt";
+            };
+        };
+
+    };
+};
