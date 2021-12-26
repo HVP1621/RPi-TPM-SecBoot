@@ -1,6 +1,14 @@
 # RPi-TPM-SecBoot
 This repository provides steps to patch U-Boot and enable TPM2.0 based *Verified Boot* and *Measured Boot*.
 
+# Setting-Up the Build Environment
+The build environment should be Linux. The code on this repo has been tested on Ubuntu 20.04. <br>
+The following steps will install the necessary build tools which will be required for the subsequent steps:
+
+```bash
+$ sudo ./install_all.sh  # ---> Reads all deb packages from the reqs.lst and installs them on the build system
+```
+
 # Downloading and Patching U-Boot
 In this section we will clone U-Boot and patch the same. The patches in the `patches/u-boot` directory will modify the FIT Image signature verification flow in U-Boot to make use of a Public Key stored in the NVRAM of TPM2.0
 
