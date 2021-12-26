@@ -1,0 +1,37 @@
+# TPM2 Initialization
+echo "======= TPM INITIALIZATION ==========="
+tpm2 init
+tpm2 startup TPM2_SU_CLEAR
+tpm2 get_capability 0x6 0x106 0x200 2
+
+# Load Boot script in Memory and compute Hash
+echo "======= Measuring Bootscript ==========="
+fatload mmc 0:1 0x3000000 boot.scr
+fatsize mmc 0:1 boot.scr
+hash sha256 0x3000000 ${filesize} *0x4000000
+tpm2 pcr_extend 1 0x4000000
+
+# Load BL in Memory and compute Hash
+echo "======= Measuring U-Boot Binary ==========="
+fatload mmc 0:1 0x3000000 u-boot.bin
+fatsize mmc 0:1 u-boot.bin
+hash sha256 0x3000000 ${filesize} *0x4000000
+tpm2 pcr_extend 1 0x4000000
+
+# Load FIT Image
+echo "======= Measuring FIT Image ==========="
+fatload mmc 0:1 0x3000000 myfit.fit
+fatsize mmc 0:1 myfit.fit
+hash sha256 0x3000000 ${filesize} *0x4000000
+tpm2 pcr_extend 1 0x4000000
+
+# Load Config.txt
+echo "======= Measuring Config ==========="
+fatload mmc 0:1 0x3000000 config.txt
+fatsize mmc 0:1 config.txt
+hash sha256 0x3000000 ${filesize} *0x4000000
+tpm2 pcr_extend 1 0x4000000
+
+# fdt addr ${fdt_addr} && fdt get value bootargs /chosen bootargs
+fatload mmc 0:1 0x3000000 myfit.fit
+bootm 0x3000000#config-1#config-tpm
