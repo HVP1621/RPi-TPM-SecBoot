@@ -47,3 +47,6 @@ With the U-Boot patched and right configs in place, we will build the U-Boot.
 ```bash
 $ make -j$(nproc) CROSS_COMPILE=aarch64-linux-gnu- all
 ```
+
+## Other Setup Steps:
+Refer the *docs* folder for instructions on how to setup the Root File System, Serial Connection and Customization to RPi4 Default Bootflow to get started with U-Boot

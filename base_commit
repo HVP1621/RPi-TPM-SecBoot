@@ -21,3 +21,8 @@ Date:   Sun Oct 31 15:48:43 2021 -0400
     # gpg: WARNING: This key is not certified with a trusted signature!
     # gpg:          There is no indication that the signature belongs to the owner.
     # Primary key fingerprint: B25C 0022 AF86 A7CC 1655  B627 7F17 3A3E 9008 ADE6
+
+- The example in this Repo has been tested with the following RPi Image:
+	https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2021-05-28/2021-05-07-raspios-buster-armhf-lite.zip
+
+
